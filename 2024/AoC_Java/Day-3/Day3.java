@@ -1,13 +1,13 @@
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class Day3 {
 
     public static void main(String[] args) throws Exception {
+        
         File file = new File("Input.txt");
         Scanner sc = new Scanner(file);
 
@@ -17,45 +17,32 @@ public class Day3 {
         }
         sc.close();
 
-        String regex = "mul\\(\\d{1,3},\\d{1,3}\\)|don't\\(\\)|do\\(\\)";
-        boolean flag = true;
-
+        // String regex = "mul\\((\\d{1,3}),(\\d{1,3})\\)";
+        String regex = "(mul\\((\\d{1,3}),(\\d{1,3})\\)|don't\\(\\)|do\\(\\))";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
 
-        ArrayList<String> arr = new ArrayList<>();
+        int sum = 0;
+        boolean flag = true;
 
         while (matcher.find()) {
-            if ("don't()".equals(matcher.group())) {
-                flag = false;
-            } else if ("do()".equals(matcher.group())) {
+            String match = matcher.group(0);
+
+            if (match.equals("do()")) {
                 flag = true;
-            } else {
+            }
+            else if (match.equals("don't()")) {
+                flag = false;
+            }
+            else {
                 if (flag) {
-                    String subRegex = "\\d{1,3}";
-                    Pattern p = Pattern.compile(subRegex);
-                    // System.out.println(matcher.group());
-                    Matcher m = p.matcher(matcher.group());
-                    String tstr = "";
-                    while (m.find()) {
-                        tstr += m.group() + " ";
-                    }
-                    if (tstr.length() > 0) {
-                        arr.add(tstr.trim());
-                    }
+                    int x = Integer.parseInt(matcher.group(2));
+                    int y = Integer.parseInt(matcher.group(3));
+                    sum += x * y;
                 }
             }
-            // System.out.println(arr);
         }
-
-        int sum = 0;
-
-        for (int i = 0; i < arr.size(); i++) {
-            String mult = arr.get(i);
-            String[] nums = mult.split(" ");
-            sum += Integer.parseInt(nums[0]) * Integer.parseInt(nums[1]);
-        }
-
+        
         System.out.println(sum);
     }
 }
