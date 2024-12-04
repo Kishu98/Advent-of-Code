@@ -19,6 +19,7 @@ class Day2 {
                 total++;
             }
         }
+        sc.close();
 
         System.out.println(total);
     }
