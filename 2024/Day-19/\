@@ -1,0 +1,23 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"strings"
+)
+
+func main() {
+	file, err := os.ReadFile("Input.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	str := strings.Split(string(file), "\n\n")
+    towels := strings.Split(str[0], ", ")
+
+    for _, t := range towels {
+        fmt.Println(t)
+    }
+
+}
