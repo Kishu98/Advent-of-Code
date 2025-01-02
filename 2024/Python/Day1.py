@@ -1,4 +1,4 @@
-a = list(
+l, r = list(
     map(
         list,
         zip(
@@ -9,9 +9,9 @@ a = list(
         ),
     )
 )
-for k in a:
-    k.sort()
 
-print(sum(abs(x - y) for x, y in zip(*a)))
 
-# print(sum(x * r.count(x) for x in l1))
+# for k in a: k.sort()
+# print(sum(abs(x-y) for x, y in zip(*a)))
+
+print(sum(x * r.count(x) for x in l))

@@ -46,7 +46,7 @@ func main() {
 		sum = sum + dist
 	}
 
-    fmt.Println(sum)
+	fmt.Println(sum)
 
 	var similarity_score int
 
@@ -58,14 +58,14 @@ func main() {
 }
 
 func search(v int, l []int) int {
-    var times int
-    for _, val := range l {
-        if v == val {
-            times++
-        }
-    }
+	var times int
+	for _, val := range l {
+		if v == val {
+			times++
+		}
+	}
 
-    return v * times
+	return v * times
 }
 
 func sort(l []int) {
