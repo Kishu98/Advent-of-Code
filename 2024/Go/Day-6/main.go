@@ -114,4 +114,3 @@ func printGrid(grid [][]rune) {
 		fmt.Println(string(row))
 	}
 }
-

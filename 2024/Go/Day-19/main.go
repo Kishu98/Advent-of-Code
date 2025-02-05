@@ -10,7 +10,7 @@ import (
 func main() {
 	content, err := os.ReadFile("Input.txt")
 	if err != nil {
-        log.Fatal(err)
+		log.Fatal(err)
 	}
 
 	str := strings.Split(string(content), "\n\n")
@@ -21,7 +21,7 @@ func main() {
 	result := 0
 	totalWays := 0
 	for _, pattern := range patterns {
-        p := strings.TrimSpace(pattern)
+		p := strings.TrimSpace(pattern)
 		if p == "" {
 			continue
 		}

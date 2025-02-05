@@ -24,14 +24,14 @@ func main() {
 		if file {
 			block, _ := strconv.Atoi(string(c))
 			for range block {
-                disk = append(disk, id)
+				disk = append(disk, id)
 			}
 			file = false
 			i++
 		} else {
 			block, _ := strconv.Atoi(string(c))
 			for range block {
-                disk = append(disk, ".")
+				disk = append(disk, ".")
 			}
 			file = true
 		}
@@ -42,23 +42,23 @@ func main() {
 		if char == "." {
 			for i := len(disk) - 1; i >= 0; i-- {
 				if disk[i] != "." && i > j {
-                    disk[i], disk[j] = disk[j], disk[i]
+					disk[i], disk[j] = disk[j], disk[i]
 					break
 				}
 			}
 		}
 	}
 
-    var sum int
-    for i, num := range disk {
-        if num == "." {
-            break
-        }
-        n, _ := strconv.Atoi(string(num))
-        sum += i * n
-    }
+	var sum int
+	for i, num := range disk {
+		if num == "." {
+			break
+		}
+		n, _ := strconv.Atoi(string(num))
+		sum += i * n
+	}
 
-    fmt.Println(sum)
+	fmt.Println(sum)
 }
 
 func swap(str string, i, j int) string {

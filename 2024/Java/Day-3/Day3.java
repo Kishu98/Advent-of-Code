@@ -3,11 +3,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class Day3 {
 
     public static void main(String[] args) throws Exception {
-        
+
         File file = new File("Input.txt");
         Scanner sc = new Scanner(file);
 
@@ -30,11 +29,9 @@ public class Day3 {
 
             if (match.equals("do()")) {
                 flag = true;
-            }
-            else if (match.equals("don't()")) {
+            } else if (match.equals("don't()")) {
                 flag = false;
-            }
-            else {
+            } else {
                 if (flag) {
                     int x = Integer.parseInt(matcher.group(2));
                     int y = Integer.parseInt(matcher.group(3));
@@ -42,7 +39,7 @@ public class Day3 {
                 }
             }
         }
-        
+
         System.out.println(sum);
     }
 }

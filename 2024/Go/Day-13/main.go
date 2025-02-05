@@ -19,18 +19,18 @@ func main() {
 	for _, s := range str {
 		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 		fmt.Println(s)
-        fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 	}
 
 	for _, s := range str {
-        if s == "\n" {
-            continue
-        }
-	    spl := strings.Split(s, "\n")
-	    for _, k := range spl {
-	        eq := strings.Split(k, ":")[1]
-	        fmt.Println(eq)
-	    }
+		if s == "\n" {
+			continue
+		}
+		spl := strings.Split(s, "\n")
+		for _, k := range spl {
+			eq := strings.Split(k, ":")[1]
+			fmt.Println(eq)
+		}
 	}
 
 }

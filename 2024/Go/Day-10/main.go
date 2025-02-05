@@ -14,7 +14,6 @@ type Position struct {
 	Col int
 }
 
-
 func main() {
 	file, err := os.OpenFile("Input.txt", os.O_CREATE|os.O_RDONLY, 0644)
 	if err != nil {
