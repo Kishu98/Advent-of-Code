@@ -32,7 +32,7 @@ func main() {
 		lastDigit := searchBack(word)
 
 		calibrationNumber := firstDigit + lastDigit
-        // fmt.Printf("first= %s \t\t last= %s\n", firstDigit, lastDigit)
+		// fmt.Printf("first= %s \t\t last= %s\n", firstDigit, lastDigit)
 		// fmt.Println(word, calibrationNumber)
 		sum += getIntNum(calibrationNumber)
 	}
@@ -52,7 +52,7 @@ var strNums = []string{"one", "two", "three", "four", "five", "six", "seven", "e
 func searchFront(w string) string {
 	s := ""
 	for _, letter := range w {
-        s += string(letter)
+		s += string(letter)
 		isNumber, index := isNum(s)
 		if isNumber {
 			return strconv.Itoa(index)
@@ -74,13 +74,13 @@ func isNum(s string) (bool, int) {
 }
 
 func searchBack(w string) string {
-    s := ""
+	s := ""
 	for i := len(w) - 1; i >= 0; i-- {
-        s = string(w[i]) + s
-        isNumber, index := isNum(s)
-        if isNumber {
-            return strconv.Itoa(index)
-        }
+		s = string(w[i]) + s
+		isNumber, index := isNum(s)
+		if isNumber {
+			return strconv.Itoa(index)
+		}
 		if unicode.IsDigit(rune(w[i])) {
 			return string(w[i])
 		}

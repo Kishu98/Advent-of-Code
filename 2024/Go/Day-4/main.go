@@ -35,7 +35,7 @@ func main() {
 
 	// result := countXMAS(grid, word)
 	fmt.Println(countXMAS(grid, word))
-    fmt.Println(countXMASPattern(grid))
+	fmt.Println(countXMASPattern(grid))
 
 }
 
@@ -44,64 +44,64 @@ func countXMAS(grid [][]string, w string) int {
 	wlen := len(w)
 	directions := [][]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {-1, -1}, {1, -1}, {-1, 1}}
 
-    isValid := func(x, y int) bool {
-        return x >= 0 && x < rows && y >= 0 && y < cols
-    }
+	isValid := func(x, y int) bool {
+		return x >= 0 && x < rows && y >= 0 && y < cols
+	}
 
-    findWord := func (x, y, dx, dy int) bool {
-        for i := 0; i < wlen; i++ {
-            nx, ny := x + i*dx, y + i*dy
-            if !isValid(nx, ny) || grid[nx][ny] != string(w[i]) {
-                return false
-            }
-        }
-        return true
-    }
+	findWord := func(x, y, dx, dy int) bool {
+		for i := 0; i < wlen; i++ {
+			nx, ny := x+i*dx, y+i*dy
+			if !isValid(nx, ny) || grid[nx][ny] != string(w[i]) {
+				return false
+			}
+		}
+		return true
+	}
 
-    count := 0
-    for x := 0; x < rows; x++ {
-        for y := 0; y < cols; y++ {
-            for _, direction := range directions {
-                dx, dy := direction[0], direction[1]
-                if findWord(x, y, dx, dy) {
-                    count++
-                }
-            }
-        }
-    }
+	count := 0
+	for x := 0; x < rows; x++ {
+		for y := 0; y < cols; y++ {
+			for _, direction := range directions {
+				dx, dy := direction[0], direction[1]
+				if findWord(x, y, dx, dy) {
+					count++
+				}
+			}
+		}
+	}
 
-    return count
+	return count
 }
 
 func countXMASPattern(grid [][]string) int {
-    rows, cols := len(grid), len(grid[0])
-    count := 0
+	rows, cols := len(grid), len(grid[0])
+	count := 0
 
-    isValidXmas := func(x, y int) bool {
-        if x-1<0 || x+1 >=rows || y-1 < 0 || y +1 >= cols {
-            return false
-        }
+	isValidXmas := func(x, y int) bool {
+		if x-1 < 0 || x+1 >= rows || y-1 < 0 || y+1 >= cols {
+			return false
+		}
 
-        tLeft, tRight := grid[x-1][y-1], grid[x-1][y+1]
-        center, bLeft, bRight := grid[x][y], grid[x+1][y-1], grid[x+1][y+1]
+		tLeft, tRight := grid[x-1][y-1], grid[x-1][y+1]
+		center, bLeft, bRight := grid[x][y], grid[x+1][y-1], grid[x+1][y+1]
 
-        if center != "A" {
-            return false
-        }
-        
-        diag1 := tLeft + center + bRight
-        diag2 := tRight + center + bLeft
+		if center != "A" {
+			return false
+		}
 
-        return (diag1 == "MAS" || diag1 =="SAM") && (diag2 == "MAS" || diag2 == "SAM")
-    }
+		diag1 := tLeft + center + bRight
+		diag2 := tRight + center + bLeft
 
-    for x := 0; x < rows; x++ {
-        for y := 0; y < cols; y++ {
-            if isValidXmas(x, y) {
-                count++
-            }
-        }
-    }
+		return (diag1 == "MAS" || diag1 == "SAM") && (diag2 == "MAS" || diag2 == "SAM")
+	}
 
-    return count
+	for x := 0; x < rows; x++ {
+		for y := 0; y < cols; y++ {
+			if isValidXmas(x, y) {
+				count++
+			}
+		}
+	}
+
+	return count
 }
