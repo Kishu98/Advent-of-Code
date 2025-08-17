@@ -1,7 +1,7 @@
 # 🎄 Advent of Code 🎄
 
-Welcome to my Advent of Code solutions repository! 🌟
+Welcome to my [Advent of Code](https://adventofcode.com/) solutions repository! 🌟
 
-Here you'll find my solutions to the daily programming puzzles from [Advent of Code](https://adventofcode.com/). I use this as a fun way to practice my coding skills.
+Just a collection of my solutions from over the years. It's a fun way for me to mess around with code and solve some cool puzzles.
 
-Happy coding! 🚀
+Feel free to look around. Happy coding!
