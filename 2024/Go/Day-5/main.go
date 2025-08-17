@@ -30,7 +30,7 @@ func main() {
 
 	scanner1 := bufio.NewScanner(file1)
 	scanner2 := bufio.NewScanner(file2)
-    scanner3 := bufio.NewScanner(file3)
+	scanner3 := bufio.NewScanner(file3)
 
 	ruleMap := make(map[string][]string)
 
