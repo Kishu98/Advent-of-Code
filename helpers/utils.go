@@ -2,23 +2,22 @@ package helpers
 
 import (
 	"bufio"
-	"log"
 	"os"
 	"strconv"
 )
 
-func Str_to_int(s string) int {
+func StrToInt(s string) (int, error) {
 	num, err := strconv.Atoi(s)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
-	return num
+	return num, nil
 }
 
-func ProcessInput(lineProcessor func(string)) {
-	file, err := os.Open("Input.txt")
+func ProcessInput(filename string, lineProcessor func(string)) error {
+	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer file.Close()
 
@@ -26,4 +25,14 @@ func ProcessInput(lineProcessor func(string)) {
 	for scanner.Scan() {
 		lineProcessor(scanner.Text())
 	}
+	return scanner.Err()
+}
+
+func MapAlphatoNum(c rune) int {
+	if c >= 'a' && c <= 'z' {
+		return int(c-'a') + 1
+	} else if c >= 'A' && c <= 'Z' {
+		return int(c-'A') + 27
+	}
+	return 0
 }

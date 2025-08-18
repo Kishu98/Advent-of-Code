@@ -10,7 +10,7 @@ var myHand = map[string]string{
 
 func part2() int {
 	totalPoints := 0
-	helpers.ProcessInput(func(line string) {
+	helpers.ProcessInput(filename, func(line string) {
 		elfHand := string(line[0])
 		mySuggestedHand := calculateHand(line)
 		points := calculatePoints(elfHand + " " + mySuggestedHand)

@@ -25,7 +25,11 @@ func Part1() int {
 			max_calories = max(max_calories, calories)
 			calories = 0
 		} else {
-			calories += helpers.Str_to_int(token)
+			calorie, err := helpers.StrToInt(token)
+			if err != nil {
+				log.Fatal(err)
+			}
+			calories += calorie
 		}
 	}
 

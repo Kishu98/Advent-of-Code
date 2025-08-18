@@ -12,7 +12,7 @@ var scores = map[string]int{
 
 func part1() int {
 	totalPoints := 0
-	helpers.ProcessInput(func(line string) {
+	helpers.ProcessInput(filename, func(line string) {
 		points := calculatePoints(line)
 		totalPoints += points
 	})

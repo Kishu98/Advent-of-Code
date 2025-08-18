@@ -30,7 +30,11 @@ func Part2() int {
 			calories = 0
 			sort.Sort(top_three)
 		} else {
-			calories += helpers.Str_to_int(token)
+			calorie, err := helpers.StrToInt(token)
+			if err != nil {
+				log.Fatal(err)
+			}
+			calories += calorie
 		}
 	}
 
