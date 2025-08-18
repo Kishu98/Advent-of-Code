@@ -1,13 +1,15 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Kishu98/AdventOfCode/helpers"
 )
 
 func part2() int {
 	var group []string
 	totalPriority := 0
-	helpers.ProcessInput(filename, func(s string) {
+	if err := helpers.ProcessInput(filename, func(s string) {
 		group = append(group, s)
 		if len(group) > 2 {
 			var charSet = make(map[rune]bool)
@@ -30,6 +32,8 @@ func part2() int {
 				}
 			}
 		}
-	})
+	}); err != nil {
+		log.Fatal(err)
+	}
 	return totalPriority
 }

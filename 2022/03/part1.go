@@ -1,12 +1,14 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Kishu98/AdventOfCode/helpers"
 )
 
 func part1() int {
 	totalPriority := 0
-	helpers.ProcessInput(filename, func(s string) {
+	if err := helpers.ProcessInput(filename, func(s string) {
 		l := len(s) / 2
 		compartmentA := s[:l]
 		compartmentB := s[l:]
@@ -22,6 +24,8 @@ func part1() int {
 				break
 			}
 		}
-	})
+	}); err != nil {
+		log.Fatal(err)
+	}
 	return totalPriority
 }
