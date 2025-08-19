@@ -2,16 +2,17 @@ package helpers
 
 import (
 	"bufio"
+	"log"
 	"os"
 	"strconv"
 )
 
-func StrToInt(s string) (int, error) {
+func StrToInt(s string) int {
 	num, err := strconv.Atoi(s)
 	if err != nil {
-		return 0, err
+		log.Fatal(err)
 	}
-	return num, nil
+	return num
 }
 
 func ProcessInput(filename string, lineProcessor func(string)) error {
