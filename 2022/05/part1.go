@@ -7,8 +7,45 @@ import (
 	"strings"
 )
 
+type moveLogic func([][]rune, int, int, int)
+
 func part1() string {
+	move := func(stacks [][]rune, count, from, to int) {
+		for range count {
+			stacks[to] = append(stacks[to], stacks[from][len(stacks[from])-1])
+			stacks[from] = stacks[from][:len(stacks[from])-1]
+		}
+	}
+	return solver(move)
+}
+
+func solver(mvLogic moveLogic) string {
 	filename := "Input.txt"
+	stacks, moveInput := parseInput(filename)
+	for _, line := range moveInput {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		count, from, to := 0, 0, 0
+		fmt.Sscanf(line, "move %d from %d to %d", &count, &from, &to)
+
+		from--
+		to--
+
+		mvLogic(stacks, count, from, to)
+
+	}
+
+	result := ""
+	for i := range len(stacks) {
+		top := len(stacks[i]) - 1
+		result += string(stacks[i][top])
+	}
+
+	return result
+}
+
+func parseInput(filename string) ([][]rune, []string) {
 	file, err := os.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -31,27 +68,5 @@ func part1() string {
 		}
 	}
 
-	for _, line := range moveInput {
-		if strings.TrimSpace(line) == "" {
-			continue
-		}
-		count, from, to := 0, 0, 0
-		fmt.Sscanf(line, "move %d from %d to %d", &count, &from, &to)
-
-		from--
-		to--
-
-		for i := 0; i < count; i++ {
-			stacks[to] = append(stacks[to], stacks[from][len(stacks[from])-1])
-			stacks[from] = stacks[from][:len(stacks[from])-1]
-		}
-	}
-
-	result := ""
-	for i := range totalStacks {
-		top := len(stacks[i]) - 1
-		result += string(stacks[i][top])
-	}
-
-	return result
+	return stacks, moveInput
 }
