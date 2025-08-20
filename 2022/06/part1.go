@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"strings"
 
 	"github.com/Kishu98/AdventOfCode/helpers"
 )
@@ -15,15 +14,12 @@ func part1() int {
 func solver(filename string, distinct int) int {
 	result := 0
 	if err := helpers.ProcessInput(filename, func(s string) {
-		start := 0
-		end := distinct - 2
-		for i := start; i <= end; i++ {
-			if !checkDuplicate(s[start : end+2]) {
-				result = end + 2
+		for i := 0; i <= len(s)-distinct; i++ {
+			window := s[i : i+distinct]
+			if !checkDuplicate(window) {
+				result = i + distinct
 				return
 			}
-			start++
-			end++
 		}
 	}); err != nil {
 		log.Fatal(err)
@@ -33,10 +29,12 @@ func solver(filename string, distinct int) int {
 }
 
 func checkDuplicate(s string) bool {
-	for i, c := range s {
-		if strings.Contains(s[:i]+s[i+1:], string(c)) {
+	seen := make(map[rune]bool)
+	for _, c := range s {
+		if seen[c] {
 			return true
 		}
+		seen[c] = true
 	}
 	return false
 }
