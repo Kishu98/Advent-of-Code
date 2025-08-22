@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -36,4 +37,27 @@ func MapAlphatoNum(c rune) int {
 		return int(c-'A') + 27
 	}
 	return 0
+}
+
+func ParseGrid(filename string) [][]int {
+	var grid [][]int
+	if err := ProcessInput(filename, func(s string) {
+		row := make([]int, len(s))
+		for y, c := range s {
+			row[y] = StrToInt(string(c))
+		}
+		grid = append(grid, row)
+	}); err != nil {
+		log.Fatal(err)
+	}
+	return grid
+}
+
+func PrintGrid(grid [][]int) {
+	for _, row := range grid {
+		for _, col := range row {
+			fmt.Print(col, " ")
+		}
+		fmt.Println()
+	}
 }
