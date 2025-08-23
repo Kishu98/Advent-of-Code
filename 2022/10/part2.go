@@ -8,42 +8,29 @@ import (
 	"github.com/Kishu98/AdventOfCode/helpers"
 )
 
-var pixelRow = ""
-
 func part2(filename string) int {
-	register := 1
-	cycle := 0
+	cpu := CPU{cycle: 0, register: 1}
+	var crtOutput strings.Builder
+
+	cycleFunc := func(cycle, register int) {
+		pixelPos := (cycle - 1) % 40
+		if pixelPos >= register-1 && pixelPos <= register+1 {
+			crtOutput.WriteString("#")
+		} else {
+			crtOutput.WriteString(".")
+		}
+		if cycle%40 == 0 {
+			crtOutput.WriteString("\n")
+		}
+	}
 
 	if err := helpers.ProcessInput(filename, func(s string) {
-		parts := strings.Split(s, " ")
-		if len(parts) == 1 {
-			cycle++
-			pixelRow += checkCRT(register, cycle)
-		} else {
-			cycle++
-			pixelRow += checkCRT(register, cycle)
-			cycle++
-			pixelRow += checkCRT(register, cycle)
-			register += helpers.StrToInt(parts[1])
-		}
+		cpu.runInstruction(s, cycleFunc)
 	}); err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(pixelRow)
+	fmt.Println(crtOutput.String())
 
 	return 0
-}
-
-func checkCRT(register int, cycle int) string {
-	c := cycle - 1
-	c = c % 40
-	if len(pixelRow) == 40 {
-		fmt.Println(pixelRow)
-		pixelRow = ""
-	}
-	if c == register-1 || c == register || c == register+1 {
-		return "#"
-	}
-	return "."
 }

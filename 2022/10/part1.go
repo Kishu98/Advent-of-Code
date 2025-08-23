@@ -7,23 +7,23 @@ import (
 	"github.com/Kishu98/AdventOfCode/helpers"
 )
 
+type CPU struct {
+	cycle    int
+	register int
+}
+
 func part1(filename string) int {
-	register := 1
-	totalCycles := 0
+	cpu := CPU{cycle: 0, register: 1}
 	signalSum := 0
 
-	if err := helpers.ProcessInput(filename, func(s string) {
-		parts := strings.Split(s, " ")
-		if len(parts) == 1 {
-			totalCycles++
-			signalSum += checkCycle(register, totalCycles)
-		} else {
-			totalCycles++
-			signalSum += checkCycle(register, totalCycles)
-			totalCycles++
-			signalSum += checkCycle(register, totalCycles)
-			register += helpers.StrToInt(parts[1])
+	cycleFunc := func(cycle, register int) {
+		if cycle == 20 || ((cycle-20)%40) == 0 {
+			signalSum += cycle * register
 		}
+	}
+
+	if err := helpers.ProcessInput(filename, func(s string) {
+		cpu.runInstruction(s, cycleFunc)
 	}); err != nil {
 		log.Fatal(err)
 	}
@@ -31,10 +31,16 @@ func part1(filename string) int {
 	return signalSum
 }
 
-func checkCycle(register, totalCycles int) int {
-	if totalCycles == 20 || ((totalCycles-20)%40) == 0 {
-		return register * totalCycles
+func (c *CPU) runInstruction(instructions string, cycleFunc func(cycle, register int)) {
+	parts := strings.Split(instructions, " ")
+	if len(parts) == 1 {
+		c.cycle++
+		cycleFunc(c.cycle, c.register)
+	} else {
+		c.cycle++
+		cycleFunc(c.cycle, c.register)
+		c.cycle++
+		cycleFunc(c.cycle, c.register)
+		c.register += helpers.StrToInt(parts[1])
 	}
-
-	return 0
 }
