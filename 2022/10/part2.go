@@ -36,13 +36,13 @@ func part2(filename string) int {
 }
 
 func checkCRT(register int, cycle int) string {
-	c := cycle
-	c = (c % 40) - 1
+	c := cycle - 1
+	c = c % 40
 	if len(pixelRow) == 40 {
 		fmt.Println(pixelRow)
 		pixelRow = ""
 	}
-	if c == register+2 || c == register || c == register+1 {
+	if c == register-1 || c == register || c == register+1 {
 		return "#"
 	}
 	return "."
