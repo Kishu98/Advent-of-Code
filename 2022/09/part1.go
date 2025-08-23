@@ -2,11 +2,14 @@ package main
 
 import (
 	"log"
-	"slices"
 	"strings"
 
 	"github.com/Kishu98/AdventOfCode/helpers"
 )
+
+type Position struct {
+	X, Y int
+}
 
 var dirs = map[string][]int{
 	"R": {0, 1},
@@ -16,39 +19,52 @@ var dirs = map[string][]int{
 }
 
 func part1(filename string) int {
-	hpos := []int{0, 0}
-	tpos := []int{0, 0}
-	result := make(map[any]bool)
-	result[[2]int{0, 0}] = true
+	result := make(map[Position]bool)
+	head := Position{0, 0}
+	tail := Position{0, 0}
 
 	if err := helpers.ProcessInput(filename, func(s string) {
 		parts := strings.Split(s, " ")
 		move := parts[0]
 		steps := helpers.StrToInt(parts[1])
+
 		for range steps {
-			currX, currY := dirs[move][0], dirs[move][1]
-			lastPos := []int{hpos[0], hpos[1]}
-			hpos = []int{hpos[0] + currX, hpos[1] + currY}
-			dirst := [][]int{{0, 1}, {0, -1}, {-1, 0}, {1, 0}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}, {0, 0}}
-			move := true
-			for _, dir := range dirst {
-				currtX, currtY := dir[0], dir[1]
-				tmp := []int{tpos[0] + currtX, tpos[1] + currtY}
-				if slices.Compare(tmp, hpos) == 0 {
-					move = false
-					break
-				}
-			}
-			if move {
-				tpos = lastPos
-				if !result[[2]int{tpos[0], tpos[1]}] {
-					result[[2]int{tpos[0], tpos[1]}] = true
-				}
-			}
+			head = moveHead(head, move)
+			tail = moveTail(head, tail)
+			result[tail] = true
 		}
 	}); err != nil {
 		log.Fatal(err)
 	}
 
 	return len(result)
+}
+
+func moveHead(head Position, move string) Position {
+	head.X += dirs[move][0]
+	head.Y += dirs[move][1]
+
+	return head
+}
+
+func moveTail(head, tail Position) Position {
+	dx := head.X - tail.X
+	dy := head.Y - tail.Y
+
+	if abs(dx) > 1 || abs(dy) > 1 {
+		if dx != 0 {
+			tail.X += dx / abs(dx)
+		}
+		if dy != 0 {
+			tail.Y += dy / abs(dy)
+		}
+	}
+	return tail
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
