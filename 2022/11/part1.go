@@ -23,15 +23,11 @@ func part1(filename string) int {
 	monkeys := getMonkeys(filename)
 
 	round := 20
-	throwItem(round, monkeys, func(i *int) {
-		*i = *i / 3
-	})
+	reduceWorry := func(i int) int {
+		return i / 3
+	}
 
-	sort.Slice(monkeys, func(i, j int) bool {
-		return monkeys[i].totalInspected > monkeys[j].totalInspected
-	})
-
-	return monkeys[0].totalInspected * monkeys[1].totalInspected
+	return calculateMonkeyBusiness(monkeys, round, reduceWorry)
 }
 
 func getMonkeys(filename string) []Monkey {
@@ -50,23 +46,37 @@ func getMonkeys(filename string) []Monkey {
 	return monkeys
 }
 
-func throwItem(round int, monkeys []Monkey, reduceFunc func(*int)) {
+func calculateMonkeyBusiness(monkeys []Monkey, round int, reduceWorry func(int) int) int {
+	throwItem(round, monkeys, func(i int) int {
+		return reduceWorry(i)
+	})
+
+	sort.Slice(monkeys, func(i, j int) bool {
+		return monkeys[i].totalInspected > monkeys[j].totalInspected
+	})
+
+	return monkeys[0].totalInspected * monkeys[1].totalInspected
+}
+
+func throwItem(round int, monkeys []Monkey, reduceFunc func(int) int) {
 	for range round {
-		for _, monkey := range monkeys {
-			if len(monkey.items) == 0 {
-				continue
-			}
-			for _, item := range monkey.items {
-				monkeys[monkey.ID].totalInspected++
-				item = monkey.operation(item)
-				reduceFunc(&item)
-				if item%monkey.divisibleBy == 0 {
-					monkeys[monkey.throwTo[0]].items = append(monkeys[monkey.throwTo[0]].items, item)
+		for i := range monkeys {
+			itemsToThrow := monkeys[i].items
+			monkeys[i].items = []int{}
+			for _, item := range itemsToThrow {
+				monkeys[i].totalInspected++
+
+				item = monkeys[i].operation(item)
+				item = reduceFunc(item)
+
+				var throwToMonkey int
+				if item%monkeys[i].divisibleBy == 0 {
+					throwToMonkey = monkeys[i].throwTo[0]
 				} else {
-					monkeys[monkey.throwTo[1]].items = append(monkeys[monkey.throwTo[1]].items, item)
+					throwToMonkey = monkeys[i].throwTo[1]
 				}
+				monkeys[throwToMonkey].items = append(monkeys[throwToMonkey].items, item)
 			}
-			monkeys[monkey.ID].items = []int{}
 		}
 	}
 }
@@ -104,7 +114,7 @@ func createMonkey(monkeyDetails string) Monkey {
 				monkey.operation = func(old int) int {
 					switch num {
 					case "old":
-						return old * old
+						return old + old
 					default:
 						return old + helpers.StrToInt(num)
 					}

@@ -1,9 +1,5 @@
 package main
 
-import (
-	"sort"
-)
-
 func part2(filename string) int {
 	monkeys := getMonkeys(filename)
 
@@ -13,13 +9,9 @@ func part2(filename string) int {
 	}
 
 	round := 10000
-	throwItem(round, monkeys, func(i *int) {
-		*i = *i % modulus
-	})
+	reduceWorry := func(i int) int {
+		return i % modulus
+	}
 
-	sort.Slice(monkeys, func(i, j int) bool {
-		return monkeys[i].totalInspected > monkeys[j].totalInspected
-	})
-
-	return monkeys[0].totalInspected * monkeys[1].totalInspected
+	return calculateMonkeyBusiness(monkeys, round, reduceWorry)
 }
