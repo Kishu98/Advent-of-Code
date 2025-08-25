@@ -53,7 +53,7 @@ func ParseGrid(filename string) [][]int {
 	return grid
 }
 
-func PrintGrid(grid [][]int) {
+func PrintGrid[T any](grid [][]T) {
 	for _, row := range grid {
 		for _, col := range row {
 			fmt.Print(col, " ")
