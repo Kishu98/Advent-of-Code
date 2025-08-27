@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/Kishu98/AdventOfCode/helpers"
@@ -14,29 +13,18 @@ type Point struct {
 }
 
 func part1(filename string) int {
-	file, err := os.ReadFile(filename)
-	if err != nil {
-		log.Fatal("Read Error:", err)
-	}
-
-	grid := make([][]rune, 1000)
-	for i := range grid {
-		grid[i] = make([]rune, 1000)
-	}
-
-	for i := range grid {
-		for j := range grid[i] {
-			grid[i][j] = '.'
-		}
-	}
-	rockPaths := strings.SplitSeq(string(file), "\n")
 	var result int
-	for rockPath := range rockPaths {
-		if len(rockPath) == 0 {
-			continue
+
+	grid := createGrid()
+	if err := helpers.ProcessInput(filename, func(s string) {
+		if len(s) == 0 {
+			return
 		}
-		parseRocks(grid, rockPath)
+		parseRocks(grid, s)
+	}); err != nil {
+		log.Fatal(err)
 	}
+
 	for dropSand(grid, 0, 500) {
 		result++
 	}
@@ -50,18 +38,18 @@ func dropSand(grid [][]rune, i, j int) bool {
 	for start := i; start < len(grid); start++ {
 		if grid[start][j] == '#' || grid[start][j] == 'o' {
 			if start == 0 || j < 0 || j >= len(grid) {
-				// grid[start][j] = 'o'
 				return false
 			}
+			// Move Left
 			if grid[start][j-1] == '.' {
 				return dropSand(grid, start, j-1)
 			}
-
+			// Move Right
 			if grid[start][j+1] == '.' {
 				return dropSand(grid, start, j+1)
 			}
+			// Sand Settles
 			grid[start-1][j] = 'o'
-			// return start-1 != 0 || j != 500
 			return true
 		}
 	}
@@ -70,18 +58,21 @@ func dropSand(grid [][]rune, i, j int) bool {
 }
 
 func printThisGrid(grid [][]rune) {
-	var start Point
-	var end Point
-	got := false
+	start, end := getBounds(grid)
+	for i := start.X; i <= end.X; i++ {
+		for j := start.Y; j <= end.Y; j++ {
+			fmt.Print(string(grid[i][j]))
+		}
+		fmt.Println()
+	}
+}
+
+func getBounds(grid [][]rune) (Point, Point) {
+	start := Point{X: len(grid), Y: len(grid[0])}
+	end := Point{X: 0, Y: 0}
+
 	for i := range grid {
 		for j := range len(grid[i]) {
-			if (grid[i][j] == 'o' || grid[i][j] == '#') && !got {
-				start.X = i
-				start.Y = j
-				end.X = i
-				end.Y = j
-				got = true
-			}
 			if grid[i][j] == '#' || grid[i][j] == 'o' {
 				start.X = min(i, start.X)
 				start.Y = min(j, start.Y)
@@ -91,12 +82,7 @@ func printThisGrid(grid [][]rune) {
 		}
 	}
 
-	for i := start.X; i <= end.X; i++ {
-		for j := start.Y; j <= end.Y; j++ {
-			fmt.Print(string(grid[i][j]))
-		}
-		fmt.Println()
-	}
+	return start, end
 }
 
 func parseRocks(grid [][]rune, rockPath string) {
@@ -123,4 +109,18 @@ func parseRocks(grid [][]rune, rockPath string) {
 			}
 		}
 	}
+}
+
+func createGrid() [][]rune {
+	grid := make([][]rune, 1000)
+	for i := range grid {
+		grid[i] = make([]rune, 1000)
+	}
+
+	for i := range grid {
+		for j := range grid[i] {
+			grid[i][j] = '.'
+		}
+	}
+	return grid
 }
