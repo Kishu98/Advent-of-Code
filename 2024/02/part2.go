@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"strings"
 
 	"github.com/Kishu98/AdventOfCode/helpers"
 )
@@ -10,13 +9,9 @@ import (
 func part2(filename string) int {
 	result := 0
 	if err := helpers.ProcessInput(filename, func(s string) {
-		parts := strings.Fields(s)
-		var levels []int
-		for i := range parts {
-			levels = append(levels, helpers.StrToInt(parts[i]))
-		}
+		levels := getLevels(s)
 
-		if checkDecreasingWithDampner(levels) || checkIncreasingWithDampner(levels) {
+		if checkMonotonicWithDampner(levels) {
 			result++
 		}
 	}); err != nil {
@@ -26,35 +21,18 @@ func part2(filename string) int {
 	return result
 }
 
-func checkDecreasingWithDampner(levels []int) bool {
-	if !checkDecreasing(levels) {
-		for i := range levels {
-			newLevel := make([]int, 0, len(levels)-1)
-			newLevel = append(newLevel, levels[:i]...)
-			newLevel = append(newLevel, levels[i+1:]...)
-			if checkDecreasing(newLevel) {
-				return true
-			}
-		}
-	} else {
+func checkMonotonicWithDampner(levels []int) bool {
+	if checkMonotonic(levels, false) || checkMonotonic(levels, true) {
 		return true
 	}
 
-	return false
-}
-
-func checkIncreasingWithDampner(levels []int) bool {
-	if !checkIncreasing(levels) {
-		for i := range levels {
-			newLevel := make([]int, 0, len(levels)-1)
-			newLevel = append(newLevel, levels[:i]...)
-			newLevel = append(newLevel, levels[i+1:]...)
-			if checkIncreasing(newLevel) {
-				return true
-			}
+	for i := range levels {
+		newLevel := make([]int, 0, len(levels)-1)
+		newLevel = append(newLevel, levels[:i]...)
+		newLevel = append(newLevel, levels[i+1:]...)
+		if checkMonotonic(newLevel, false) || checkMonotonic(newLevel, true) {
+			return true
 		}
-	} else {
-		return true
 	}
 
 	return false

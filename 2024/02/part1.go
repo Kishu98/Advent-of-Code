@@ -10,13 +10,8 @@ import (
 func part1(filename string) int {
 	result := 0
 	if err := helpers.ProcessInput(filename, func(s string) {
-		parts := strings.Fields(s)
-		var levels []int
-		for i := range parts {
-			levels = append(levels, helpers.StrToInt(parts[i]))
-		}
-
-		if checkDecreasing(levels) || checkIncreasing(levels) {
+		levels := getLevels(s)
+		if checkMonotonic(levels, true) || checkMonotonic(levels, false) {
 			result++
 		}
 	}); err != nil {
@@ -26,23 +21,34 @@ func part1(filename string) int {
 	return result
 }
 
-func checkDecreasing(levels []int) bool {
+func checkMonotonic(levels []int, isIncreasing bool) bool {
 	for i := 1; i < len(levels); i++ {
-		if levels[i-1] <= levels[i] || abs(levels[i-1]-levels[i]) > 3 {
+		if abs(levels[i-1]-levels[i]) > 3 {
 			return false
 		}
+
+		if isIncreasing {
+			if levels[i-1] >= levels[i] {
+				return false
+			}
+		} else {
+			if levels[i-1] <= levels[i] {
+				return false
+			}
+		}
 	}
+
 	return true
 }
 
-func checkIncreasing(levels []int) bool {
-	for i := 1; i < len(levels); i++ {
-		if levels[i-1] >= levels[i] || abs(levels[i-1]-levels[i]) > 3 {
-			return false
-		}
+func getLevels(s string) []int {
+	parts := strings.Fields(s)
+	var levels []int
+	for i := range parts {
+		levels = append(levels, helpers.StrToInt(parts[i]))
 	}
 
-	return true
+	return levels
 }
 
 func abs(n int) int {
