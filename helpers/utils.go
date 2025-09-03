@@ -39,12 +39,12 @@ func MapAlphatoNum(c rune) int {
 	return 0
 }
 
-func ParseGrid(filename string) [][]int {
-	var grid [][]int
+func ParseGrid[T any](filename string, conv func(rune) T) [][]T {
+	var grid [][]T
 	if err := ProcessInput(filename, func(s string) {
-		row := make([]int, len(s))
+		row := make([]T, len(s))
 		for y, c := range s {
-			row[y] = StrToInt(string(c))
+			row[y] = conv(c)
 		}
 		grid = append(grid, row)
 	}); err != nil {
