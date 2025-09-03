@@ -3,7 +3,9 @@ package main
 import "github.com/Kishu98/AdventOfCode/helpers"
 
 func part1(filename string) int {
-	grid := helpers.ParseGrid(filename)
+	grid := helpers.ParseGrid(filename, func(r rune) int {
+		return int(r - '0')
+	})
 
 	totalVisible := len(grid) * len(grid[0])
 	for i, row := range grid {
