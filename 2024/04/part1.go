@@ -1,22 +1,13 @@
 package main
 
 import (
-	"bufio"
-	"log"
-	"os"
+	"github.com/Kishu98/AdventOfCode/helpers"
 )
 
 func part1(filename string) int {
-	file, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var grid [][]rune
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		grid = append(grid, []rune(scanner.Text()))
-	}
+	grid := helpers.ParseGrid(filename, func(r rune) rune {
+		return r
+	})
 
 	result := 0
 	for x, row := range grid {
@@ -37,7 +28,7 @@ func checkXMAS(grid [][]rune, x, y int) int {
 		word := ""
 		for k := range 4 {
 			dx, dy := x+(k*dir[0]), y+(k*dir[1])
-			if dx >= 0 && dx < len(grid) && dy >= 0 && dy < len(grid) {
+			if dx >= 0 && dx < len(grid) && dy >= 0 && dy < len(grid[dx]) {
 				word += string(grid[dx][dy])
 			} else {
 				break

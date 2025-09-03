@@ -1,22 +1,13 @@
 package main
 
 import (
-	"bufio"
-	"log"
-	"os"
+	"github.com/Kishu98/AdventOfCode/helpers"
 )
 
 func part2(filename string) int {
-	file, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var grid [][]rune
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		grid = append(grid, []rune(scanner.Text()))
-	}
+	grid := helpers.ParseGrid(filename, func(r rune) rune {
+		return r
+	})
 
 	result := 0
 	for x, row := range grid {
@@ -33,21 +24,15 @@ func part2(filename string) int {
 func checkNewXMAS(grid [][]rune, x, y int) int {
 	result := 0
 	dx1, dy1, dx2, dy2 := x-1, y-1, x+1, y+1
-	if dx1 >= 0 && dy1 >= 0 && dx2 >= 0 && dy2 >= 0 && dx1 < len(grid) && dy2 < len(grid) && dx2 < len(grid) && dy2 < len(grid) {
-		if grid[dx1][dy1] == 'M' && grid[dx2][dy2] == 'S' {
-			if grid[dx1][dy2] == 'M' && grid[dx2][dy1] == 'S' {
-				result++
-			} else if grid[dx1][dy2] == 'S' && grid[dx2][dy1] == 'M' {
-				result++
-			}
-		} else if grid[dx1][dy1] == 'S' && grid[dx2][dy2] == 'M' {
-			if grid[dx1][dy2] == 'M' && grid[dx2][dy1] == 'S' {
-				result++
-			} else if grid[dx1][dy2] == 'S' && grid[dx2][dy1] == 'M' {
-				result++
-			}
+	if dx1 >= 0 && dx2 < len(grid) && dy1 >= 0 && dy2 < len(grid) {
+		if isPair(grid[dx1][dy1], grid[dx2][dy2]) && isPair(grid[dx1][dy2], grid[dx2][dy1]) {
+			result++
 		}
 	}
 
 	return result
+}
+
+func isPair(a, b rune) bool {
+	return (a == 'M' && b == 'S') || (a == 'S' && b == 'M')
 }
